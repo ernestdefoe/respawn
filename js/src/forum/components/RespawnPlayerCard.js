@@ -1,6 +1,6 @@
 import app from 'flarum/forum/app';
 import Component from 'flarum/common/Component';
-import avatar from 'flarum/common/helpers/avatar';
+import Avatar from 'flarum/common/components/Avatar';
 
 /**
  * Player card — shows the logged-in user as a "player" with derived
@@ -21,7 +21,7 @@ export default class RespawnPlayerCard extends Component {
     const toNext = 100 - progress;
 
     return m('.RespawnPanel.RespawnPlayerCard', [
-      m('.RespawnPlayerCard-avatar', avatar(user)),
+      m('.RespawnPlayerCard-avatar', Avatar.component({ user })),
       m('.RespawnPlayerCard-name', user.username()),
       m('.RespawnPlayerCard-lvl', `LVL ${level} · ${new Intl.NumberFormat().format(posts)} POSTS`),
       m('.RespawnPlayerCard-xpBar', m('.fill', { style: `width: ${progress}%` })),
