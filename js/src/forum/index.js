@@ -1,11 +1,13 @@
 import app from 'flarum/forum/app';
 import { extend, override } from 'flarum/common/extend';
 import IndexPage from 'flarum/forum/components/IndexPage';
+import HeaderSecondary from 'flarum/forum/components/HeaderSecondary';
 
 import RespawnHero from './components/RespawnHero';
 import RespawnStats from './components/RespawnStats';
 import RespawnPlayerCard from './components/RespawnPlayerCard';
 import RespawnRarityLegend from './components/RespawnRarityLegend';
+import RespawnModeToggle from './components/RespawnModeToggle';
 
 /*
  * Apply the user's saved theme mode immediately at module-load time so
@@ -65,6 +67,13 @@ app.initializers.add('ernestdefoe-respawn', () => {
    * so we override and concat our panels after the original.
    * PlayerCard hides itself for guests.
    * ----------------------------------------------------------- */
+  /* -----------------------------------------------------------
+   * Add the dark/light mode toggle to the header.
+   * ----------------------------------------------------------- */
+  extend(HeaderSecondary.prototype, 'items', function (items) {
+    items.add('respawn-mode-toggle', RespawnModeToggle.component(), 25);
+  });
+
   override(IndexPage.prototype, 'sidebar', function (original) {
     return [
       original(),
