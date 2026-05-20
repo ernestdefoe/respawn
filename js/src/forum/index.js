@@ -4,6 +4,8 @@ import IndexPage from 'flarum/forum/components/IndexPage';
 
 import RespawnHero from './components/RespawnHero';
 import RespawnStats from './components/RespawnStats';
+import RespawnPlayerCard from './components/RespawnPlayerCard';
+import RespawnRarityLegend from './components/RespawnRarityLegend';
 
 /*
  * Apply the user's saved theme mode immediately at module-load time so
@@ -55,5 +57,19 @@ app.initializers.add('ernestdefoe-respawn', () => {
    * ----------------------------------------------------------- */
   extend(IndexPage.prototype, 'contentItems', function (items) {
     items.add('respawn-stats', RespawnStats.component(), -100);
+  });
+
+  /* -----------------------------------------------------------
+   * Append player card + rarity legend to the IndexPage sidebar.
+   * sidebar() returns a single IndexSidebar vnode (not an ItemList),
+   * so we override and concat our panels after the original.
+   * PlayerCard hides itself for guests.
+   * ----------------------------------------------------------- */
+  override(IndexPage.prototype, 'sidebar', function (original) {
+    return [
+      original(),
+      RespawnPlayerCard.component(),
+      RespawnRarityLegend.component(),
+    ];
   });
 });

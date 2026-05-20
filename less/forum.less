@@ -471,6 +471,140 @@ body {
 }
 
 // =============================================================================
+// Sidebar widgets — shared panel chrome
+// =============================================================================
+.RespawnPanel {
+  background: var(--r-surface);
+  border: 1px solid var(--r-line);
+  padding: 14px;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+
+  &::before { /* corner notch — top-right */
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 14px; height: 14px;
+    background: var(--r-bg);
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+    border-left: 1px solid var(--r-line);
+    border-bottom: 1px solid var(--r-line);
+  }
+
+  &-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--r-muted);
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .arrow { color: var(--r-accent); }
+  }
+}
+
+// Player card
+.RespawnPlayerCard {
+  padding: 18px 14px 16px;
+  text-align: center;
+
+  &-avatar {
+    margin: 0 auto 12px;
+    width: 64px;
+    height: 64px;
+
+    .Avatar,
+    img {
+      width: 64px !important;
+      height: 64px !important;
+      clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+      border-radius: 0 !important;
+      display: block;
+    }
+  }
+
+  &-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--r-text);
+    margin-bottom: 4px;
+  }
+
+  &-lvl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--r-accent);
+    text-shadow: 0 0 8px var(--r-accent-soft);
+    margin-bottom: 14px;
+  }
+
+  &-xpBar {
+    background: var(--r-surface-2);
+    border: 1px solid var(--r-line);
+    height: 8px;
+    position: relative;
+    overflow: hidden;
+
+    .fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--r-accent), var(--r-magenta));
+      box-shadow: 0 0 10px var(--r-accent-soft);
+      transition: width .4s ease;
+    }
+  }
+
+  &-xpLabel {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--r-muted);
+    margin-top: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+// Rarity legend
+.RespawnRarityLegend {
+  &-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--r-text);
+    }
+
+    .pip {
+      width: 10px;
+      height: 10px;
+      transform: rotate(45deg);
+      flex: 0 0 10px;
+      box-shadow: 0 0 8px currentColor;
+
+      &.legendary { background: var(--r-gold);  color: var(--r-gold); }
+      &.epic      { background: var(--r-epic);  color: var(--r-epic); }
+      &.rare      { background: var(--r-rare);  color: var(--r-rare); }
+      &.common    { background: var(--r-common); color: var(--r-common); box-shadow: none; }
+    }
+  }
+}
+
+// =============================================================================
 // Forms + inputs
 // =============================================================================
 .FormControl {
