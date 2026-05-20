@@ -1,0 +1,38 @@
+{
+  "name": "ernestdefoe/respawn",
+  "description": "A gaming-styled theme for Flarum 2: chamfered surfaces, neon accents, mono typography, level badges, and a server-status stats footer.",
+  "keywords": ["flarum", "flarum-extension", "theme", "gaming", "dark", "neon"],
+  "type": "flarum-extension",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "ernestdefoe",
+      "email": "ernestdefoe@gmail.com"
+    }
+  ],
+  "homepage": "https://github.com/ernestdefoe/respawn",
+  "support": {
+    "issues": "https://github.com/ernestdefoe/respawn/issues",
+    "source": "https://github.com/ernestdefoe/respawn"
+  },
+  "require": {
+    "php": "^8.3",
+    "flarum/core": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "ErnestDefoe\\Respawn\\": "src/"
+    }
+  },
+  "extra": {
+    "flarum-extension": {
+      "title": "Respawn — gaming theme",
+      "category": "theme",
+      "icon": {
+        "name": "fa-solid fa-gamepad",
+        "backgroundColor": "#0b0f14",
+        "color": "#2af0ff"
+      }
+    }
+  }
+}

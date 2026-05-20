@@ -1,0 +1,516 @@
+// =============================================================================
+// Respawn — gaming theme for Flarum 2 (forum frontend)
+// =============================================================================
+
+// ---- Design tokens ----------------------------------------------------------
+// Two sets — dark is the default; light kicks in under [data-respawn="light"]
+// which the JS extender sets on <html> based on the admin's mode setting.
+
+:root,
+[data-respawn="dark"] {
+  --r-bg:          #0b0f14;
+  --r-surface:     #131923;
+  --r-surface-2:   #1a2230;
+  --r-line:        #243043;
+  --r-text:        #e5edf7;
+  --r-muted:       #8ea0bb;
+  --r-accent:      #2af0ff;
+  --r-accent-soft: rgba(42, 240, 255, 0.2);
+  --r-magenta:     #ff3da8;
+  --r-gold:        #ffc658;
+  --r-epic:        #c46bff;
+  --r-rare:        #2af0ff;
+  --r-common:      #5b6c85;
+  --r-header-bg:   linear-gradient(180deg, #101824 0%, #0b0f14 100%);
+  --r-scanline:    rgba(255, 255, 255, 0.025);
+  --r-scanline-2:  rgba(255, 255, 255, 0.015);
+  --r-avatar-fg:   #0b0f14;
+  --r-btn-fg:      #061319;
+}
+
+[data-respawn="light"] {
+  --r-bg:          #f3f5f9;
+  --r-surface:     #ffffff;
+  --r-surface-2:   #eef1f6;
+  --r-line:        #d6deea;
+  --r-text:        #0c1422;
+  --r-muted:       #5a6b85;
+  --r-accent:      #0089ff;
+  --r-accent-soft: rgba(0, 137, 255, 0.16);
+  --r-magenta:     #d6168a;
+  --r-gold:        #c98800;
+  --r-epic:        #8a3ddc;
+  --r-rare:        #0089ff;
+  --r-common:      #8090a8;
+  --r-header-bg:   linear-gradient(180deg, #ffffff 0%, #f3f5f9 100%);
+  --r-scanline:    rgba(0, 20, 60, 0.025);
+  --r-scanline-2:  rgba(0, 20, 60, 0.015);
+  --r-avatar-fg:   #ffffff;
+  --r-btn-fg:      #ffffff;
+}
+
+// ---- Override Flarum core tokens -------------------------------------------
+// Flarum 2 exposes a small set of CSS vars; map ours onto them so every
+// component that already uses them re-skins for free.
+
+:root {
+  --body-bg:           var(--r-bg);
+  --text-color:        var(--r-text);
+  --primary-color:     var(--r-accent);
+  --secondary-color:   var(--r-magenta);
+  --header-bg:         var(--r-bg);
+  --header-color:      var(--r-text);
+  --control-bg:        var(--r-surface);
+  --control-color:     var(--r-text);
+  --muted-color:       var(--r-muted);
+  --muted-more-color:  var(--r-line);
+  --shadow-color:      rgba(0, 0, 0, 0.4);
+}
+
+// =============================================================================
+// Body + typography
+// =============================================================================
+html {
+  background: var(--r-bg);
+}
+
+body {
+  background:
+    radial-gradient(1200px 800px at 80% -10%, var(--r-surface-2) 0%, var(--r-bg) 60%) fixed;
+  color: var(--r-text);
+  transition: background-color .2s, color .2s;
+}
+
+// Mono for code-y/UI accents we add — leave body copy alone
+.respawn-mono,
+.Respawn-mono {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.04em;
+}
+
+// =============================================================================
+// Header
+// =============================================================================
+.App-header {
+  background: var(--r-header-bg) !important;
+  border-bottom: 1px solid var(--r-line);
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(180deg, transparent 0 2px, var(--r-scanline) 2px 3px);
+    pointer-events: none;
+  }
+
+  .item-logo,
+  .item-title,
+  .Header-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--r-text);
+    text-shadow: 0 0 12px var(--r-accent-soft);
+  }
+}
+
+// =============================================================================
+// Buttons
+// =============================================================================
+.Button {
+  border: 1px solid var(--r-line);
+  background: var(--r-surface);
+  color: var(--r-text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: border-color .15s, box-shadow .15s, color .15s;
+  border-radius: 0;
+
+  &:hover {
+    border-color: var(--r-accent);
+    color: var(--r-accent);
+    box-shadow: 0 0 0 1px var(--r-accent-soft), 0 0 16px -4px var(--r-accent);
+    background: var(--r-surface);
+  }
+}
+
+.Button--primary {
+  background: linear-gradient(135deg, var(--r-accent) 0%, color-mix(in oklab, var(--r-accent) 70%, #000) 100%);
+  color: var(--r-btn-fg) !important;
+  border: none;
+  box-shadow: 0 0 0 1px var(--r-accent), 0 0 24px -6px var(--r-accent);
+
+  &:hover {
+    background: linear-gradient(135deg, var(--r-accent) 0%, color-mix(in oklab, var(--r-accent) 80%, #000) 100%);
+    color: var(--r-btn-fg) !important;
+    box-shadow: 0 0 0 1px var(--r-accent), 0 0 32px -4px var(--r-accent);
+    transform: translateY(-1px);
+  }
+}
+
+// =============================================================================
+// Discussion list — the main forum surface
+// =============================================================================
+.DiscussionListItem {
+  background: var(--r-surface);
+  border: 1px solid var(--r-line);
+  margin-bottom: 12px;
+  transition: border-color .15s, box-shadow .15s, transform .15s;
+
+  &:hover {
+    border-color: var(--r-accent);
+    box-shadow: 0 0 0 1px var(--r-accent-soft), 0 0 28px -10px var(--r-accent);
+    transform: translateY(-1px);
+  }
+
+  .DiscussionListItem-content {
+    padding: 14px 18px;
+  }
+
+  .DiscussionListItem-title {
+    font-weight: 600;
+    color: var(--r-text);
+  }
+
+  .DiscussionListItem-info {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--r-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .DiscussionListItem-count {
+    background: var(--r-surface-2);
+    color: var(--r-text);
+    border: 1px solid var(--r-line);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    border-radius: 0;
+  }
+}
+
+// =============================================================================
+// Tag tiles → rarity tiles
+// =============================================================================
+.TagTile,
+.DiscussionListItem .item-terminalPost,
+.tag {
+  border-radius: 0 !important;
+}
+
+.TagLabel,
+.tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+  background: transparent !important;
+  padding: 2px 8px;
+  border-radius: 0 !important;
+
+  &::before { content: '◢ '; }
+  &::after  { content: ' ◣'; }
+}
+
+// =============================================================================
+// Hero — replaces the default IndexPage hero
+// =============================================================================
+.RespawnHero {
+  position: relative;
+  background:
+    radial-gradient(700px 220px at 90% -10%, var(--r-accent-soft), transparent 60%),
+    radial-gradient(500px 200px at 10% 110%, color-mix(in oklab, var(--r-magenta) 20%, transparent), transparent 60%),
+    linear-gradient(135deg, var(--r-surface) 0%, var(--r-surface-2) 100%);
+  border: 1px solid var(--r-line);
+  padding: 36px 36px 32px;
+  overflow: hidden;
+  margin-bottom: 24px;
+
+  &::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 28px; height: 28px;
+    background: var(--r-bg);
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+    border-left: 1px solid var(--r-line);
+    border-bottom: 1px solid var(--r-line);
+  }
+
+  &::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(180deg, transparent 0 3px, var(--r-scanline-2) 3px 4px);
+    pointer-events: none;
+  }
+
+  &-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--r-accent);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &::after {
+      content: '';
+      flex: 0 0 80px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--r-accent), transparent);
+    }
+  }
+
+  &-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+    color: var(--r-text);
+
+    .accent {
+      color: var(--r-accent);
+      text-shadow: 0 0 20px var(--r-accent-soft);
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 28px;
+      background: var(--r-accent);
+      vertical-align: -4px;
+      margin-left: 4px;
+      animation: respawn-blink 1s steps(2) infinite;
+      box-shadow: 0 0 12px var(--r-accent);
+    }
+  }
+
+  &-tagline {
+    color: var(--r-muted);
+    font-size: 15px;
+    max-width: 640px;
+    margin: 0 0 22px;
+  }
+
+  &-chips {
+    margin-top: 18px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  &-chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border: 1px solid var(--r-line);
+    background: var(--r-bg);
+    color: var(--r-muted);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .15s;
+
+    &:hover {
+      color: var(--r-accent);
+      border-color: var(--r-accent);
+      box-shadow: 0 0 12px -4px var(--r-accent);
+      text-decoration: none;
+    }
+
+    .glyph {
+      color: var(--r-accent);
+      margin-right: 6px;
+    }
+  }
+}
+
+@keyframes respawn-blink {
+  50% { opacity: 0; }
+}
+
+// =============================================================================
+// Stats footer
+// =============================================================================
+.RespawnStats {
+  margin: 40px 0 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--r-line);
+
+  &-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--r-muted);
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .arrow { color: var(--r-accent); }
+
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--r-line), transparent);
+    }
+  }
+
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+
+    @media (max-width: 720px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &-card {
+    background: linear-gradient(180deg, var(--r-surface) 0%, var(--r-surface-2) 100%);
+    border: 1px solid var(--r-line);
+    padding: 18px 18px 16px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .15s, box-shadow .15s;
+
+    &:hover {
+      border-color: var(--r-accent);
+      box-shadow: 0 0 0 1px var(--r-accent-soft), 0 0 24px -8px var(--r-accent);
+    }
+
+    &::before {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 16px; height: 16px;
+      background: var(--r-bg);
+      clip-path: polygon(100% 0, 0 0, 100% 100%);
+      border-left: 1px solid var(--r-line);
+      border-bottom: 1px solid var(--r-line);
+    }
+
+    &::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(180deg, transparent 0 3px, var(--r-scanline-2) 3px 4px);
+      pointer-events: none;
+    }
+  }
+
+  &-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--r-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+
+    .glyph { color: var(--r-accent); font-size: 13px; }
+  }
+
+  &-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--r-text);
+    line-height: 1;
+    text-shadow: 0 0 16px var(--r-accent-soft);
+  }
+
+  &-delta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--r-accent);
+    margin-top: 8px;
+
+    &.live {
+      color: var(--r-magenta);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      &::before {
+        content: '';
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        background: var(--r-magenta);
+        box-shadow: 0 0 8px var(--r-magenta);
+        animation: respawn-pulse 1.6s ease-in-out infinite;
+      }
+    }
+  }
+}
+
+@keyframes respawn-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.85); }
+}
+
+// =============================================================================
+// Forms + inputs
+// =============================================================================
+.FormControl {
+  background: var(--r-bg);
+  border: 1px solid var(--r-line);
+  color: var(--r-text);
+  border-radius: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+
+  &:focus {
+    border-color: var(--r-accent);
+    box-shadow: 0 0 0 1px var(--r-accent-soft), 0 0 18px -6px var(--r-accent);
+  }
+}
+
+// =============================================================================
+// Sidebar nav
+// =============================================================================
+.IndexPage-nav .item-newDiscussion .Button--primary,
+.Nav-items .item .Button {
+  border-radius: 0;
+}
+
+.IndexPage-nav .Dropdown-menu,
+.Dropdown-menu {
+  background: var(--r-surface);
+  border: 1px solid var(--r-line);
+  border-radius: 0;
+  box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.5);
+}
+
+// =============================================================================
+// Post (discussion view) — minimal pass for now
+// =============================================================================
+.Post-header .Post-user .username {
+  color: var(--r-accent);
+  font-weight: 700;
+}
+
+.PostStream {
+  .Post {
+    border-bottom: 1px solid var(--r-line);
+  }
+}
