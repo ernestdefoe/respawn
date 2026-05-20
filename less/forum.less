@@ -3,11 +3,11 @@
 // =============================================================================
 
 // ---- Design tokens ----------------------------------------------------------
-// Two sets — dark is the default; light kicks in under [data-respawn="light"]
+// Two sets — dark is the default; light kicks in under [data-theme^="light"]
 // which the JS extender sets on <html> based on the admin's mode setting.
 
 :root,
-[data-respawn="dark"] {
+[data-theme^="dark"] {
   --r-bg:          #0b0f14;
   --r-surface:     #131923;
   --r-surface-2:   #1a2230;
@@ -28,7 +28,7 @@
   --r-btn-fg:      #061319;
 }
 
-[data-respawn="light"] {
+[data-theme^="light"] {
   --r-bg:          #f3f5f9;
   --r-surface:     #ffffff;
   --r-surface-2:   #eef1f6;

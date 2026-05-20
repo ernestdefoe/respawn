@@ -10,45 +10,49 @@ import RespawnRarityLegend from './components/RespawnRarityLegend';
 import RespawnModeToggle from './components/RespawnModeToggle';
 
 /*
- * Apply the user's saved theme mode immediately at module-load time so
- * the page doesn't flash the wrong palette. We can't read the admin
- * default (app.forum.attribute) here — app.forum isn't populated until
- * Flarum finishes booting — so we use localStorage if present, dark
- * otherwise, and reconcile with the admin default inside the initializer.
+ * Respawn keys off Flarum 2's native `<html data-theme="...">` signal
+ * (set server-side from Admin → Appearance → Color Scheme). Our LESS
+ * defines dark tokens as the default and light tokens under
+ * [data-theme^='light'].
+ *
+ * Per-user override: if the user clicked the moon/sun toggle we honour
+ * their localStorage choice and overwrite the server-side data-theme
+ * value on each page boot. The Respawn admin setting (Theme Mode) is
+ * the default when neither localStorage nor the Color Scheme picker
+ * has been set.
  */
-try {
-  const saved = localStorage.getItem('respawn-mode');
-  document.documentElement.setAttribute('data-respawn', saved || 'dark');
-} catch (e) {
-  document.documentElement.setAttribute('data-respawn', 'dark');
-}
+(function applySavedMode() {
+  try {
+    const saved = localStorage.getItem('respawn-mode');
+    if (saved === 'light' || saved === 'dark') {
+      document.documentElement.setAttribute('data-theme', saved);
+    }
+  } catch (e) { /* private mode */ }
+})();
 
 app.initializers.add('ernestdefoe-respawn', () => {
   /* -----------------------------------------------------------
-   * Reconcile theme mode with the admin default
-   * -----------------------------------------------------------
-   * If the user hasn't explicitly chosen a mode (no localStorage
-   * entry), honour the admin's configured default. If they have,
-   * leave their choice alone.
-   */
+   * Reconcile with the admin's Theme Mode default if neither the
+   * Color Scheme picker nor a user toggle has explicitly set one.
+   * ----------------------------------------------------------- */
   try {
-    if (!localStorage.getItem('respawn-mode') && app.forum) {
-      const adminMode = app.forum.attribute('respawnMode') || 'dark';
-      document.documentElement.setAttribute('data-respawn', adminMode);
+    const localChoice = localStorage.getItem('respawn-mode');
+    const flarumScheme = document.documentElement.getAttribute('data-theme');
+    if (!localChoice && !flarumScheme && app.forum) {
+      const adminDefault = app.forum.attribute('respawnMode') || 'dark';
+      document.documentElement.setAttribute('data-theme', adminDefault);
     }
-  } catch (e) { /* private-mode browsers can't read localStorage */ }
+  } catch (e) { /* ignore */ }
 
   window.respawnToggleMode = () => {
-    const next = document.documentElement.getAttribute('data-respawn') === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-respawn', next);
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = current.startsWith('dark') ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
     try { localStorage.setItem('respawn-mode', next); } catch (e) { /* ignore */ }
   };
 
   /* -----------------------------------------------------------
    * Replace the IndexPage hero with the Respawn hero.
-   * Returning an array matches the working Mosaic pattern — the
-   * stock hero slot expects iterable children, and a bare component
-   * vnode misbehaves in some render passes.
    * ----------------------------------------------------------- */
   override(IndexPage.prototype, 'hero', function () {
     return [RespawnHero.component()];
@@ -62,18 +66,15 @@ app.initializers.add('ernestdefoe-respawn', () => {
   });
 
   /* -----------------------------------------------------------
-   * Append player card + rarity legend to the IndexPage sidebar.
-   * sidebar() returns a single IndexSidebar vnode (not an ItemList),
-   * so we override and concat our panels after the original.
-   * PlayerCard hides itself for guests.
-   * ----------------------------------------------------------- */
-  /* -----------------------------------------------------------
-   * Add the dark/light mode toggle to the header.
+   * Header mode toggle (moon / sun).
    * ----------------------------------------------------------- */
   extend(HeaderSecondary.prototype, 'items', function (items) {
     items.add('respawn-mode-toggle', RespawnModeToggle.component(), 25);
   });
 
+  /* -----------------------------------------------------------
+   * Sidebar: Player Card + Rarity Legend below Flarum's nav.
+   * ----------------------------------------------------------- */
   override(IndexPage.prototype, 'sidebar', function (original) {
     return [
       original(),
