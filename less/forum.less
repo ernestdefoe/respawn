@@ -95,7 +95,9 @@ body {
   background: var(--r-header-bg) !important;
   border-bottom: 1px solid var(--r-line);
   position: relative;
-  overflow: hidden;
+  // Intentionally NOT `overflow: hidden` — that clips the user-menu
+  // dropdown when it opens below the header. The scanline ::after is
+  // already bounded by its `inset: 0`.
 
   &::after {
     content: '';
