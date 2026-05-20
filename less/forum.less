@@ -470,31 +470,29 @@ body {
 // Header mode toggle (dark / light)
 // =============================================================================
 .RespawnModeToggle {
-  background: transparent !important;
-  border: 1px solid var(--r-line) !important;
-  color: var(--r-accent) !important;
+  background: transparent;
+  border: 1px solid var(--r-line);
+  color: var(--r-accent);
   width: 36px;
   height: 36px;
-  padding: 0 !important;
+  padding: 0;
+  margin: 0 4px;
   display: inline-grid;
   place-items: center;
-  font-size: 16px !important;
+  font-size: 18px;
   line-height: 1;
-  letter-spacing: 0 !important;
-  text-transform: none !important;
+  font-family: inherit;
+  cursor: pointer;
+  vertical-align: middle;
   transition: all .15s;
 
   &:hover {
-    color: var(--r-text) !important;
-    border-color: var(--r-accent) !important;
+    color: var(--r-text);
+    border-color: var(--r-accent);
     box-shadow: 0 0 0 1px var(--r-accent-soft), 0 0 16px -4px var(--r-accent);
-    background: transparent !important;
   }
 
-  .Button-label {
-    font-size: 16px;
-    letter-spacing: 0;
-  }
+  &:focus { outline: none; border-color: var(--r-accent); }
 }
 
 // =============================================================================
