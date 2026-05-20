@@ -504,15 +504,361 @@ body {
 }
 
 // =============================================================================
-// Post (discussion view) — minimal pass for now
+// Post stream + individual posts (discussion view)
 // =============================================================================
-.Post-header .Post-user .username {
-  color: var(--r-accent);
-  font-weight: 700;
-}
 
 .PostStream {
-  .Post {
+  background: transparent;
+}
+
+.PostStream-item {
+  margin-bottom: 14px;
+}
+
+// Each post becomes a chamfered card matching the rest of the theme
+.Post {
+  background: var(--r-surface);
+  border: 1px solid var(--r-line);
+  padding: 18px 22px;
+  position: relative;
+  transition: border-color .15s, box-shadow .15s;
+
+  &:hover {
+    border-color: var(--r-line);  // stay calm on hover — only highlight on focus
+
+    .Post-actions { opacity: 1; }
+  }
+
+  &.Post--active,
+  &:focus-within {
+    border-color: var(--r-accent);
+    box-shadow: 0 0 0 1px var(--r-accent-soft), 0 0 28px -10px var(--r-accent);
+  }
+}
+
+// Header strip: avatar + username + meta
+.Post-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--r-line);
+}
+
+// Hex-clipped avatar to match user pills + recruit cards
+.PostUser {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .PostUser-avatar,
+  .Avatar {
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    border-radius: 0 !important;
+    width: 40px;
+    height: 40px;
+  }
+
+  h3, .username {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+
+    a, a:link {
+      color: var(--r-accent);
+      text-shadow: 0 0 12px var(--r-accent-soft);
+
+      &:hover { color: var(--r-text); text-decoration: none; }
+    }
+  }
+}
+
+.PostUser-badges {
+  margin-left: 8px;
+}
+
+// Meta line — number, timestamp, permalink
+.PostMeta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--r-muted);
+  letter-spacing: 0.04em;
+
+  .PostMeta-number {
+    color: var(--r-accent);
+    font-weight: 700;
+    background: var(--r-surface-2);
+    border: 1px solid var(--r-line);
+    padding: 2px 8px;
+    margin-right: 8px;
+    border-radius: 0;
+
+    &::before { content: '#'; opacity: 0.6; }
+  }
+
+  .PostMeta-time,
+  .PostMeta-ip {
+    color: var(--r-muted);
+  }
+
+  .PostMeta-permalink a { color: var(--r-muted); }
+}
+
+// Post body — typography
+.Post-body {
+  color: var(--r-text);
+  font-size: 15px;
+  line-height: 1.6;
+
+  p { margin: 0 0 14px; }
+  p:last-child { margin-bottom: 0; }
+
+  a, a:link {
+    color: var(--r-accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--r-accent-soft);
+
+    &:hover {
+      color: var(--r-magenta);
+      border-bottom-color: var(--r-magenta);
+    }
+  }
+
+  code {
+    background: var(--r-bg);
+    border: 1px solid var(--r-line);
+    border-radius: 0;
+    padding: 2px 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    color: var(--r-accent);
+  }
+
+  pre {
+    background: var(--r-bg);
+    border: 1px solid var(--r-line);
+    border-radius: 0;
+    padding: 14px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    overflow-x: auto;
+
+    code {
+      background: transparent;
+      border: none;
+      padding: 0;
+      color: var(--r-text);
+    }
+  }
+
+  blockquote {
+    border-left: 3px solid var(--r-accent);
+    background: var(--r-surface-2);
+    padding: 10px 18px;
+    margin: 14px 0;
+    color: var(--r-muted);
+    font-style: normal;
+
+    p:last-child { margin-bottom: 0; }
+  }
+
+  hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--r-line), transparent);
+    margin: 20px 0;
+  }
+
+  ul, ol { padding-left: 22px; }
+  li { margin-bottom: 4px; }
+
+  table {
+    border-collapse: collapse;
+    th, td {
+      border: 1px solid var(--r-line);
+      padding: 8px 12px;
+    }
+    th {
+      background: var(--r-surface-2);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+  }
+}
+
+// Quote-from-other-post styling
+.UserMention,
+.PostMention {
+  background: var(--r-surface-2);
+  border: 1px solid var(--r-line);
+  color: var(--r-accent);
+  padding: 1px 8px;
+  border-radius: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+
+  &::before { content: '@'; opacity: 0.5; }
+}
+
+// Footer: actions + reactions
+.Post-footer,
+.Post-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--r-line);
+}
+
+.Post-actions {
+  opacity: 0.5;
+  transition: opacity .15s;
+
+  .Button {
+    background: transparent;
+    border: 1px solid var(--r-line);
+    color: var(--r-muted);
+    padding: 4px 10px;
+    font-size: 11px;
+
+    &:hover {
+      color: var(--r-accent);
+      border-color: var(--r-accent);
+      background: transparent;
+    }
+
+    &.Button--has-icon .Button-label { letter-spacing: 0.08em; }
+  }
+}
+
+// Like/reaction count
+.PostFooter,
+.Post-footer {
+  ul, li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .item-likes,
+  .item-likedBy {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--r-muted);
+    letter-spacing: 0.04em;
+
+    .fa, .fas, .far {
+      color: var(--r-magenta);
+      margin-right: 6px;
+    }
+  }
+}
+
+// Event posts (renamed, sticky, locked, merged) — quieter style
+.EventPost {
+  background: transparent;
+  border: 1px dashed var(--r-line);
+  padding: 10px 18px;
+  color: var(--r-muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+
+  &:hover { box-shadow: none; }
+
+  .EventPost-icon {
+    color: var(--r-accent);
+    margin-right: 8px;
+  }
+
+  .EventPost-info {
+    a { color: var(--r-accent); }
+  }
+}
+
+// Hidden / render-failed posts
+.Post--hidden,
+.Post--renderFailed {
+  opacity: 0.55;
+  border-style: dashed;
+}
+
+// Reply placeholder (where you click to start a reply at the bottom)
+.ReplyPlaceholder {
+  background: var(--r-surface);
+  border: 1px dashed var(--r-line);
+  padding: 18px 22px;
+  cursor: pointer;
+  transition: border-color .15s, box-shadow .15s;
+
+  &:hover {
+    border-color: var(--r-accent);
+    border-style: solid;
+    box-shadow: 0 0 0 1px var(--r-accent-soft), 0 0 24px -10px var(--r-accent);
+  }
+
+  .PostUser h3 a { color: var(--r-accent); }
+
+  .Post-body { color: var(--r-muted); font-style: normal; }
+}
+
+// Post stream scrubber (the right-side timeline indicator)
+.PostStreamScrubber {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.04em;
+
+  .Scrubber-bar {
+    background: var(--r-surface-2);
+    border-left: 1px solid var(--r-line);
+  }
+
+  .Scrubber-handle .Scrubber-bar-after {
+    background: linear-gradient(180deg, var(--r-accent), var(--r-magenta));
+    box-shadow: 0 0 8px var(--r-accent-soft);
+  }
+
+  .Scrubber-info strong { color: var(--r-accent); }
+}
+
+// Discussion page hero (title row above the first post)
+.DiscussionPage-stream {
+  margin-top: 18px;
+}
+
+.Hero.DiscussionHero {
+  background: linear-gradient(135deg, var(--r-surface) 0%, var(--r-surface-2) 100%);
+  border: 1px solid var(--r-line);
+  padding: 24px 28px;
+  border-radius: 0;
+
+  .DiscussionHero-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--r-text);
+  }
+}
+
+// Composer (the reply box that slides up from the bottom)
+.Composer {
+  background: var(--r-surface);
+  border-top: 1px solid var(--r-accent);
+  box-shadow: 0 -8px 32px -8px var(--r-accent-soft);
+
+  .Composer-header,
+  .Composer-controls {
+    background: var(--r-surface-2);
     border-bottom: 1px solid var(--r-line);
+  }
+
+  .TextEditor,
+  textarea {
+    background: var(--r-bg);
+    color: var(--r-text);
+    border: 1px solid var(--r-line);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   }
 }
