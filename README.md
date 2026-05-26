@@ -1,5 +1,11 @@
 # Respawn
 
+[![Floxum](https://floxum.com/extension/ernestdefoe/respawn/badge/name)](https://floxum.com/extension/ernestdefoe/respawn)
+[![Version](https://floxum.com/extension/ernestdefoe/respawn/badge/highest-version)](https://floxum.com/extension/ernestdefoe/respawn)
+[![Downloads](https://floxum.com/extension/ernestdefoe/respawn/badge/downloads)](https://floxum.com/extension/ernestdefoe/respawn)
+[![Review](https://floxum.com/extension/ernestdefoe/respawn/badge/review)](https://floxum.com/extension/ernestdefoe/respawn)
+[![License](https://floxum.com/extension/ernestdefoe/respawn/badge/license)](https://floxum.com/extension/ernestdefoe/respawn)
+
 A gaming theme for **Flarum 2**: chamfered surfaces, neon accents, mono typography, hex-clipped avatars, hero with blinking cursor, level/XP sidebar widget, and a stats footer.
 
 ---
