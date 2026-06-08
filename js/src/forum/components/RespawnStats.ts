@@ -1,10 +1,6 @@
-// @ts-nocheck — TODO: declare class properties + parameter types
-// Transitional marker from the audit-driven TS conversion. The
-// underlying JS uses Flarum's `this.foo = ...` initialiser pattern
-// which TypeScript strict mode rejects. Remove once a follow-up pass
-// adds explicit property declarations and vnode/callback types.
 import app from 'flarum/forum/app';
 import Component from 'flarum/common/Component';
+import type Mithril from 'mithril';
 
 /**
  * Stats footer rendered at the bottom of the index page. Reads counts
@@ -12,44 +8,41 @@ import Component from 'flarum/common/Component';
  * respawnMemberCount, respawnOnlineCount) which ForumStatistics
  * computes server-side at a 60s cache.
  *
- * Null values render as "—" rather than a misleading 0 — the cached
- * computation can fail (DB blip) and we'd rather show that than lie.
+ * Null values render as the "empty" glyph rather than a misleading 0 — the
+ * cached computation can fail (DB blip) and we'd rather show that than lie.
  */
 export default class RespawnStats extends Component {
-  view() {
-    const t = (k, fallback) => fallback;  // locales wired later
-
-    const fmt = (n) => {
-      if (n == null) return '—';
+  view(): Mithril.Children {
+    const fmt = (n: number | null): Mithril.Children => {
+      if (n == null) return app.translator.trans('ernestdefoe-respawn.forum.stats.empty');
       return new Intl.NumberFormat().format(n);
     };
 
-    const posts       = app.forum.attribute('respawnPostCount');
-    const discussions = app.forum.attribute('respawnDiscussionCount');
-    const members     = app.forum.attribute('respawnMemberCount');
-    const online      = app.forum.attribute('respawnOnlineCount');
+    const posts = app.forum.attribute('respawnPostCount') as number | null;
+    const discussions = app.forum.attribute('respawnDiscussionCount') as number | null;
+    const members = app.forum.attribute('respawnMemberCount') as number | null;
+    const online = app.forum.attribute('respawnOnlineCount') as number | null;
 
     return m('section.RespawnStats', [
       m('h3.RespawnStats-title', [
         m('span.arrow', '▸'),
-        ' Server Status',
+        ' ',
+        app.translator.trans('ernestdefoe-respawn.forum.stats.title'),
       ]),
       m('.RespawnStats-grid', [
-        this.card('◆', 'Posts',       fmt(posts)),
-        this.card('◇', 'Discussions', fmt(discussions)),
-        this.card('⬢', 'Members',     fmt(members)),
-        this.card('▶', 'Online Now',  fmt(online), true),
+        this.card('◆', app.translator.trans('ernestdefoe-respawn.forum.stats.posts'), fmt(posts)),
+        this.card('◇', app.translator.trans('ernestdefoe-respawn.forum.stats.discussions'), fmt(discussions)),
+        this.card('⬢', app.translator.trans('ernestdefoe-respawn.forum.stats.members'), fmt(members)),
+        this.card('▶', app.translator.trans('ernestdefoe-respawn.forum.stats.online'), fmt(online), true),
       ]),
     ]);
   }
 
-  card(glyph, label, value, live = false) {
+  card(glyph: string, label: Mithril.Children, value: Mithril.Children, live = false): Mithril.Children {
     return m('.RespawnStats-card', [
       m('.RespawnStats-label', [m('span.glyph', glyph), ' ', label]),
       m('.RespawnStats-value', value),
-      live
-        ? m('.RespawnStats-delta.live', 'LIVE')
-        : null,
+      live ? m('.RespawnStats-delta.live', app.translator.trans('ernestdefoe-respawn.forum.stats.live')) : null,
     ]);
   }
 }

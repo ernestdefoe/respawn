@@ -1,10 +1,6 @@
-// @ts-nocheck — TODO: declare class properties + parameter types
-// Transitional marker from the audit-driven TS conversion. The
-// underlying JS uses Flarum's `this.foo = ...` initialiser pattern
-// which TypeScript strict mode rejects. Remove once a follow-up pass
-// adds explicit property declarations and vnode/callback types.
 import app from 'flarum/forum/app';
 import Component from 'flarum/common/Component';
+import type Mithril from 'mithril';
 
 /**
  * Replaces the IndexPage hero with Respawn's branded panel: eyebrow,
@@ -16,26 +12,28 @@ import Component from 'flarum/common/Component';
  * the empty string hides the relevant element.
  */
 export default class RespawnHero extends Component {
-  view() {
-    const forumTitle = app.forum.attribute('title') || 'Respawn';
-    const tagline    = (app.forum.attribute('respawnTagline') || '').trim();
-    const eyebrow    = (app.forum.attribute('respawnEyebrow') || '').trim();
-    const chipsRaw   = (app.forum.attribute('respawnChips')   || '').trim();
-    const chips      = chipsRaw ? chipsRaw.split(',').map((s) => s.trim()).filter(Boolean) : [];
+  view(): Mithril.Children {
+    const forumTitle = (app.forum.attribute('title') as string) || 'Respawn';
+    const tagline = ((app.forum.attribute('respawnTagline') as string) || '').trim();
+    const eyebrow = ((app.forum.attribute('respawnEyebrow') as string) || '').trim();
+    const chipsRaw = ((app.forum.attribute('respawnChips') as string) || '').trim();
+    const chips = chipsRaw ? chipsRaw.split(',').map((s) => s.trim()).filter(Boolean) : [];
 
     return m('section.RespawnHero', [
       eyebrow ? m('.RespawnHero-eyebrow', eyebrow) : null,
 
       m('h1.RespawnHero-title', [
-        'Welcome to ',
-        m('span.accent', forumTitle),
+        app.translator.trans('ernestdefoe-respawn.forum.hero.welcome', {
+          forum: m('span.accent', forumTitle),
+        }),
         m('span.cursor'),
       ]),
 
       tagline ? m('p.RespawnHero-tagline', tagline) : null,
 
       chips.length
-        ? m('.RespawnHero-chips',
+        ? m(
+            '.RespawnHero-chips',
             chips.map((slug) =>
               m('a.RespawnHero-chip', { href: app.route('tag', { tags: slug }) }, [
                 m('span.glyph', '◢'),
