@@ -154,6 +154,11 @@ body {
 // Discussion list — the main forum surface
 // =============================================================================
 .DiscussionListItem {
+  // `position: relative` so the z-index raise below applies. The hover
+  // `transform` already creates a stacking context, which is what trapped the
+  // item's dropdown beneath later list items — raising the active item's
+  // z-index above its siblings lets the open menu paint over them. (#2)
+  position: relative;
   background: var(--r-surface);
   border: 1px solid var(--r-line);
   margin-bottom: 12px;
@@ -163,6 +168,14 @@ body {
     border-color: var(--r-accent);
     box-shadow: 0 0 0 1px var(--r-accent-soft), 0 0 28px -10px var(--r-accent);
     transform: translateY(-1px);
+    z-index: 5;
+  }
+
+  // Keep the item (and its open dropdown) above lower items the whole time the
+  // menu is open — `:focus-within` holds even after the cursor moves into the
+  // menu or the row is no longer hovered.
+  &:focus-within {
+    z-index: 5;
   }
 
   .DiscussionListItem-content {
