@@ -18,16 +18,17 @@ export default class RespawnPlayerCard extends Component {
     const posts = user.commentCount?.() || 0;
     const level = Math.floor(posts / 100) + 1;
     const progress = posts % 100;
-    const toNext = 100 - progress;
+    const t = (key: string, args?: Record<string, unknown>) =>
+      app.translator.trans('ernestdefoe-respawn.forum.player.' + key, args);
 
     return m('.RespawnPanel.RespawnPlayerCard', [
       m('.RespawnPlayerCard-avatar', Avatar.component({ user })),
       m('.RespawnPlayerCard-name', user.username()),
-      m('.RespawnPlayerCard-lvl', `LVL ${level} · ${new Intl.NumberFormat().format(posts)} POSTS`),
+      m('.RespawnPlayerCard-lvl', t('level', { level, posts: new Intl.NumberFormat().format(posts) })),
       m('.RespawnPlayerCard-xpBar', m('.fill', { style: `width: ${progress}%` })),
       m('.RespawnPlayerCard-xpLabel', [
-        m('span', `${progress} / 100`),
-        m('span', `NEXT: LVL ${level + 1}`),
+        m('span', t('progress', { progress })),
+        m('span', t('next', { level: level + 1 })),
       ]),
     ]);
   }
