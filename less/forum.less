@@ -225,6 +225,21 @@ body {
   padding: 2px 8px;
   border-radius: 0 !important;
 
+  // We strip the tag's filled background above, so the contrast text colour
+  // flarum/tags computes for that background (--tag-color) is unreadable on the
+  // dark surface — and its inner `.TagLabel-text { color: var(--tag-color)
+  // !important }` beats any plain `color` override. So drive the outline AND
+  // text from the tag's own colour by overriding the --tag-color custom prop
+  // (it inherits into .TagLabel-text, so it wins the !important).
+  color: var(--r-muted);
+  --tag-color: var(--r-muted);
+
+  &.colored,
+  &--colored {
+    color: var(--tag-bg);          // border (currentColor) = the tag's own colour
+    --tag-color: var(--tag-bg);    // .TagLabel-text picks this up too
+  }
+
   &::before { content: '◢ '; }
   &::after  { content: ' ◣'; }
 }
