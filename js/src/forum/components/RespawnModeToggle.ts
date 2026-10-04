@@ -2,10 +2,11 @@ import app from 'flarum/forum/app';
 import Component from 'flarum/common/Component';
 import extractText from 'flarum/common/utils/extractText';
 import type Mithril from 'mithril';
+import { rememberToggle } from '../mode';
 
 /**
  * Header toggle that flips Flarum's native data-theme between dark
- * and light and persists the choice in localStorage. Sits alongside
+ * and light, and remembers the choice (see mode.ts). Sits alongside
  * the search / notifications icons in HeaderSecondary.
  */
 export default class RespawnModeToggle extends Component {
@@ -26,12 +27,10 @@ export default class RespawnModeToggle extends Component {
         'aria-label': label,
         onclick: () => {
           const next = isDark ? 'light' : 'dark';
-          document.documentElement.setAttribute('data-theme', next);
-          try {
-            localStorage.setItem('respawn-mode', next);
-          } catch (e) {
-            /* ignore */
-          }
+          // Through core, so app.colorScheme agrees with the page. Remembered
+          // after, because core's setter clears an older toggle choice.
+          app.setColorScheme(next);
+          rememberToggle(next);
           m.redraw();
         },
       },

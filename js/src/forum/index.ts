@@ -11,17 +11,16 @@ import RespawnPlayerCard from './components/RespawnPlayerCard';
 import RespawnRarityLegend from './components/RespawnRarityLegend';
 import RespawnModeToggle from './components/RespawnModeToggle';
 
+import { respawnScheme, respawnResolving, setRespawnResolving, forgetToggle } from './mode';
+
 /*
- * Respawn keys off Flarum 2's native `<html data-theme="...">` signal
- * (set server-side from Admin → Appearance → Color Scheme). Our LESS
- * defines dark tokens as the default and light tokens under
+ * Respawn keys off Flarum 2's native `<html data-theme="...">` signal. Our
+ * LESS defines dark tokens as the default and light tokens under
  * [data-theme^='light'].
  *
- * Per-user override: if the user clicked the moon/sun toggle we honour
- * their localStorage choice and overwrite the server-side data-theme
- * value on each page boot. The Respawn admin setting (Theme Mode) is
- * the default when neither localStorage nor the Color Scheme picker
- * has been set.
+ * Applied once here, as the script loads, so a member who chose dark doesn't
+ * see a flash of light while the forum boots. The initializer below is what
+ * makes it stick.
  */
 (function applySavedMode() {
   try {
@@ -36,19 +35,38 @@ import RespawnModeToggle from './components/RespawnModeToggle';
 
 app.initializers.add('ernestdefoe-respawn', () => {
   /* -----------------------------------------------------------
-   * Reconcile with the admin's Theme Mode default if neither the
-   * Color Scheme picker nor a user toggle has explicitly set one.
+   * 🚨 Hook core's own colour-scheme resolution; don't race it.
+   *
+   * Core decides the scheme in initColorScheme(), which runs when the app
+   * MOUNTS — after every initializer and after the early apply above — and it
+   * overwrote whatever Respawn had set. So a member who picked dark got light
+   * back on every refresh, and the admin's Theme Mode never applied at all,
+   * because core always sets data-theme and the old "only if nothing set it"
+   * check could never pass. (RESP-6)
+   *
+   * Core also re-runs it whenever the system scheme changes, which comes
+   * back through this same override.
    * ----------------------------------------------------------- */
-  try {
-    const localChoice = localStorage.getItem('respawn-mode');
-    const flarumScheme = document.documentElement.getAttribute('data-theme');
-    if (!localChoice && !flarumScheme && app.forum) {
-      const adminDefault = (app.forum.attribute('respawnMode') as string) || 'dark';
-      document.documentElement.setAttribute('data-theme', adminDefault);
+  override(app as any, 'initColorScheme', function (this: any, original: (...args: any[]) => void, ...args: any[]) {
+    setRespawnResolving(true);
+    try {
+      original(...args);
+
+      const scheme = respawnScheme();
+      if (scheme) this.setColorScheme(scheme);
+    } finally {
+      setRespawnResolving(false);
     }
-  } catch (e) {
-    /* ignore */
-  }
+  });
+
+  /*
+   * A scheme chosen through Flarum's own settings or switcher is a newer,
+   * explicit choice, so it replaces the toggle's remembered one.
+   */
+  override(app as any, 'setColorScheme', function (original: (scheme: string) => void, scheme: string) {
+    if (!respawnResolving()) forgetToggle();
+    original(scheme);
+  });
 
   /* -----------------------------------------------------------
    * Replace the IndexPage hero with the Respawn hero.
