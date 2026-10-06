@@ -88,10 +88,9 @@ Every component reads through these variables.
 
 ## Support
 
-Questions, bug reports, and feature requests:
-
-- **Support forum:** https://ernestdefoe.online
-- **Issues:** https://github.com/ernestdefoe/respawn/issues
+- **Support forum:** [Respawn on ernestdefoe.online](https://ernestdefoe.online/d/11)
+- **Flarum community:** [Respawn on discuss.flarum.org](https://discuss.flarum.org/d/39298-respawn)
+- **Bug reports:** [GitHub issues](https://github.com/ernestdefoe/respawn/issues)
 
 ---
 
