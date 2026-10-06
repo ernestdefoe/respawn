@@ -19,6 +19,7 @@
     ],
     "homepage": "https://github.com/ernestdefoe/respawn",
     "support": {
+        "forum": "https://discuss.flarum.org/d/39298-respawn",
         "issues": "https://github.com/ernestdefoe/respawn/issues",
         "source": "https://github.com/ernestdefoe/respawn"
     },
