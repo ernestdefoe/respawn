@@ -95,6 +95,10 @@ Questions, bug reports, and feature requests:
 
 ---
 
+## Discuss
+
+Questions, ideas and release notes: [Respawn on discuss.flarum.org](https://discuss.flarum.org/d/39298-respawn).
+
 ## License
 
 Respawn is released under the [MIT License](LICENSE).
