@@ -26,7 +26,8 @@ class ForumStatistics
     public function __construct(
         private CacheRepository $cache,
         private LoggerInterface $log,
-    ) {}
+    ) {
+    }
 
     public function postCount(): ?int
     {
@@ -35,6 +36,7 @@ class ForumStatistics
                 return Post::query()->whereNull('hidden_at')->count();
             } catch (QueryException $e) {
                 $this->log->warning('[respawn] postCount failed', ['exception' => $e]);
+
                 return null;
             }
         });
@@ -47,6 +49,7 @@ class ForumStatistics
                 return Discussion::query()->whereNull('hidden_at')->count();
             } catch (QueryException $e) {
                 $this->log->warning('[respawn] discussionCount failed', ['exception' => $e]);
+
                 return null;
             }
         });
@@ -59,6 +62,7 @@ class ForumStatistics
                 return User::query()->count();
             } catch (QueryException $e) {
                 $this->log->warning('[respawn] memberCount failed', ['exception' => $e]);
+
                 return null;
             }
         });
@@ -73,6 +77,7 @@ class ForumStatistics
                     ->count();
             } catch (QueryException $e) {
                 $this->log->warning('[respawn] onlineCount failed', ['exception' => $e]);
+
                 return null;
             }
         });

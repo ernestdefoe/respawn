@@ -22,14 +22,14 @@ return [
      * copy, and the chip list for the hero are all admin-configurable.
      */
     (new Extend\Settings())
-        ->serializeToForum('respawnMode',     'ernestdefoe-respawn.mode')
-        ->serializeToForum('respawnTagline',  'ernestdefoe-respawn.tagline')
-        ->serializeToForum('respawnEyebrow',  'ernestdefoe-respawn.eyebrow')
-        ->serializeToForum('respawnChips',    'ernestdefoe-respawn.chips')
-        ->default('ernestdefoe-respawn.mode',    'dark')
+        ->serializeToForum('respawnMode', 'ernestdefoe-respawn.mode')
+        ->serializeToForum('respawnTagline', 'ernestdefoe-respawn.tagline')
+        ->serializeToForum('respawnEyebrow', 'ernestdefoe-respawn.eyebrow')
+        ->serializeToForum('respawnChips', 'ernestdefoe-respawn.chips')
+        ->default('ernestdefoe-respawn.mode', 'dark')
         ->default('ernestdefoe-respawn.tagline', 'Drop in, level up, and join the discussion.')
         ->default('ernestdefoe-respawn.eyebrow', '▸ Player Connected')
-        ->default('ernestdefoe-respawn.chips',   ''),
+        ->default('ernestdefoe-respawn.chips', ''),
 
     /*
      * Stat counts attached to the Forum resource so the JS stats
