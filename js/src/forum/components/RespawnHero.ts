@@ -17,7 +17,12 @@ export default class RespawnHero extends Component {
     const tagline = ((app.forum.attribute('respawnTagline') as string) || '').trim();
     const eyebrow = ((app.forum.attribute('respawnEyebrow') as string) || '').trim();
     const chipsRaw = ((app.forum.attribute('respawnChips') as string) || '').trim();
-    const chips = chipsRaw ? chipsRaw.split(',').map((s) => s.trim()).filter(Boolean) : [];
+    const chips = chipsRaw
+      ? chipsRaw
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : [];
 
     return m('section.RespawnHero', [
       eyebrow ? m('.RespawnHero-eyebrow', eyebrow) : null,
@@ -34,12 +39,7 @@ export default class RespawnHero extends Component {
       chips.length
         ? m(
             '.RespawnHero-chips',
-            chips.map((slug) =>
-              m('a.RespawnHero-chip', { href: app.route('tag', { tags: slug }) }, [
-                m('span.glyph', '◢'),
-                slug.replace(/-/g, ' '),
-              ])
-            )
+            chips.map((slug) => m('a.RespawnHero-chip', { href: app.route('tag', { tags: slug }) }, [m('span.glyph', '◢'), slug.replace(/-/g, ' ')]))
           )
         : null,
     ]);

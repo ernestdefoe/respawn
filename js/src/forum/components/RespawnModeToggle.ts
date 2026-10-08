@@ -13,11 +13,7 @@ export default class RespawnModeToggle extends Component {
   view(): Mithril.Children {
     const current = document.documentElement.getAttribute('data-theme') || 'dark';
     const isDark = current.startsWith('dark');
-    const label = extractText(
-      app.translator.trans(
-        isDark ? 'ernestdefoe-respawn.forum.mode.to_light' : 'ernestdefoe-respawn.forum.mode.to_dark'
-      )
-    );
+    const label = extractText(app.translator.trans(isDark ? 'ernestdefoe-respawn.forum.mode.to_light' : 'ernestdefoe-respawn.forum.mode.to_dark'));
 
     return m(
       'button.RespawnModeToggle',

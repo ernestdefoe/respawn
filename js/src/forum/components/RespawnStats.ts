@@ -24,11 +24,7 @@ export default class RespawnStats extends Component {
     const online = app.forum.attribute('respawnOnlineCount') as number | null;
 
     return m('section.RespawnStats', [
-      m('h3.RespawnStats-title', [
-        m('span.arrow', '▸'),
-        ' ',
-        app.translator.trans('ernestdefoe-respawn.forum.stats.title'),
-      ]),
+      m('h3.RespawnStats-title', [m('span.arrow', '▸'), ' ', app.translator.trans('ernestdefoe-respawn.forum.stats.title')]),
       m('.RespawnStats-grid', [
         this.card('◆', app.translator.trans('ernestdefoe-respawn.forum.stats.posts'), fmt(posts)),
         this.card('◇', app.translator.trans('ernestdefoe-respawn.forum.stats.discussions'), fmt(discussions)),

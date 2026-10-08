@@ -63,7 +63,7 @@ app.initializers.add('ernestdefoe-respawn', () => {
    * A scheme chosen through Flarum's own settings or switcher is a newer,
    * explicit choice, so it replaces the toggle's remembered one.
    */
-  override(app as any, 'setColorScheme', function (original: (scheme: string) => void, scheme: string) {
+  override(app, 'setColorScheme', function (original, scheme) {
     if (!respawnResolving()) forgetToggle();
     original(scheme);
   });
