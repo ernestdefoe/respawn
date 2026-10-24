@@ -73,14 +73,24 @@ It's a deliberately simple linear ramp. If you want a non-linear curve (exponent
 
 ## Customising
 
-The theme exposes its tokens as CSS variables on `:root` (and `[data-respawn="light"]`), so an extension or custom CSS can override any of them without touching Respawn itself:
+The theme exposes its tokens as `--r-*` CSS variables. Respawn follows Flarum 2's own `data-theme` attribute on `<html>`: the dark set lives on `:root, [data-theme^="dark"]` and the light set on `[data-theme^="light"]`. An extension or custom CSS can override any of them without touching Respawn itself:
 
 ```css
-:root {
+/* Dark mode */
+:root,
+[data-theme^="dark"] {
   --r-accent:  #50ff8a;    /* lime instead of cyan */
   --r-magenta: #ff6b35;    /* orange instead of magenta */
 }
+
+/* Light mode */
+[data-theme^="light"] {
+  --r-accent:  #1a9e4b;
+  --r-magenta: #d9531e;
+}
 ```
+
+A rule on plain `:root` alone also lands in light mode (custom CSS loads after Respawn's), so use the two selectors above when the modes need different colours.
 
 Every component reads through these variables.
 
